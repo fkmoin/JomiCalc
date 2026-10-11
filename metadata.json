@@ -1,0 +1,6 @@
+{
+  "name": "JomiCalc - ডিজিটাল ভূমি পরিমাপ ও ক্যালকুলেটর",
+  "description": "বাংলাদেশের ডিজিটাল ভূমি পরিমাপ, শতক-কাঠা-বিঘা রূপান্তর, জমির নকশা ও আয়তন, ইসলামিক ফারায়েজ এবং দলিল রেজিস্ট্রি ফি ক্যালকুলেটর।",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

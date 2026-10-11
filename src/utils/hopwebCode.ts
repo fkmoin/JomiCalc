@@ -1,0 +1,1098 @@
+export const HOPWEB_SINGLE_FILE_HTML = `<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JomiCalc Pro — বাংলাদেশের সর্বজনীন ডিজিটাল ভূমি প্ল্যাটফর্ম</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Hind Siliguri -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Hind Siliguri', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            500: '#16a34a',
+                            600: '#15803d',
+                            700: '#166534',
+                            800: '#14532d',
+                            900: '#0f3d21',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .tab-btn.active {
+            background-color: #15803d;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(21, 128, 61, 0.25);
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between select-none">
+
+    <!-- Top Header -->
+    <header class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 text-white px-4 py-3 sticky top-0 z-50 shadow-md">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/15 p-2 rounded-xl backdrop-blur-md border border-white/20 text-emerald-300">
+                    <i class="fa-solid fa-landmark text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight flex items-center gap-1.5">
+                        JomiCalc Pro <span class="text-[10px] bg-emerald-500 text-white px-2 py-0.5 rounded-full font-semibold">Hopweb Edition</span>
+                    </h1>
+                    <p class="text-[11px] text-emerald-100 opacity-90">ডিজিটাল ভূমি প্ল্যাটফর্ম ও স্মার্ট ক্যালকুলেটর</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="toggleLang()" id="lang-btn" class="bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded-xl text-xs font-semibold text-emerald-200 border border-white/10">
+                    <i class="fa-solid fa-globe"></i> <span id="lang-text">বাংলা</span>
+                </button>
+                <div class="bg-white/10 px-2.5 py-1 rounded-xl text-[11px] font-semibold text-emerald-200 border border-white/10">
+                    <i class="fa-solid fa-shield-halved"></i> v3.0
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 sticky top-[57px] z-40 shadow-sm overflow-x-auto scrollbar-none">
+        <div class="max-w-4xl mx-auto flex items-center gap-1.5 px-3 py-2">
+            <button onclick="switchTab('converter')" id="tab-converter" class="tab-btn active px-3.5 py-2 rounded-xl font-bold whitespace-nowrap text-xs transition-all flex items-center gap-1.5 text-slate-700">
+                <i class="fa-solid fa-calculator text-emerald-600"></i> রূপান্তর
+            </button>
+            <button onclick="switchTab('area')" id="tab-area" class="tab-btn px-3.5 py-2 rounded-xl font-bold whitespace-nowrap text-xs transition-all flex items-center gap-1.5 text-slate-700">
+                <i class="fa-solid fa-ruler-combined text-blue-600"></i> আয়তন ও নকশা
+            </button>
+            <button onclick="switchTab('inheritance')" id="tab-inheritance" class="tab-btn px-3.5 py-2 rounded-xl font-bold whitespace-nowrap text-xs transition-all flex items-center gap-1.5 text-slate-700">
+                <i class="fa-solid fa-kaaba text-amber-600"></i> ফারায়েজ
+            </button>
+            <button onclick="switchTab('division')" id="tab-division" class="tab-btn px-3.5 py-2 rounded-xl font-bold whitespace-nowrap text-xs transition-all flex items-center gap-1.5 text-slate-700">
+                <i class="fa-solid fa-users-line text-purple-600"></i> বণ্টন
+            </button>
+            <button onclick="switchTab('valuation')" id="tab-valuation" class="tab-btn px-3.5 py-2 rounded-xl font-bold whitespace-nowrap text-xs transition-all flex items-center gap-1.5 text-slate-700">
+                <i class="fa-solid fa-sack-dollar text-teal-600"></i> রেজিস্ট্রি ফি
+            </button>
+            <button onclick="switchTab('glossary')" id="tab-glossary" class="tab-btn px-3.5 py-2 rounded-xl font-bold whitespace-nowrap text-xs transition-all flex items-center gap-1.5 text-slate-700">
+                <i class="fa-solid fa-book-bookmark text-indigo-600"></i> ভূমি শব্দকোষ
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto px-3 py-4 w-full flex-grow space-y-4">
+
+        <!-- ================= MODULE 1: CONVERTER ================= -->
+        <div id="module-converter" class="tab-content space-y-4">
+            <!-- Quick Presets -->
+            <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl p-3 shadow-sm space-y-2">
+                <div class="flex items-center justify-between text-xs font-bold text-emerald-900">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-bolt text-amber-500"></i> দ্রুত পরিমাপ বাছুন:</span>
+                    <button onclick="clearAllInputs()" class="text-red-600 hover:text-red-700 text-[11px] flex items-center gap-1"><i class="fa-solid fa-rotate-left"></i> রিসেট</button>
+                </div>
+                <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+                    <button onclick="applyPreset('shotok', 1)" class="px-3 py-1.5 rounded-xl bg-white border border-emerald-300 font-bold text-emerald-800 shadow-sm whitespace-nowrap active:scale-95 transition">⚡ ১ শতক</button>
+                    <button onclick="applyPreset('shotok', 5)" class="px-3 py-1.5 rounded-xl bg-white border border-emerald-300 font-bold text-emerald-800 shadow-sm whitespace-nowrap active:scale-95 transition">⚡ ৫ শতক</button>
+                    <button onclick="applyPreset('shotok', 10)" class="px-3 py-1.5 rounded-xl bg-white border border-emerald-300 font-bold text-emerald-800 shadow-sm whitespace-nowrap active:scale-95 transition">⚡ ১০ শতক</button>
+                    <button onclick="applyPreset('katha', 1)" class="px-3 py-1.5 rounded-xl bg-white border border-slate-300 font-bold text-slate-700 shadow-sm whitespace-nowrap active:scale-95 transition">🏠 ১ কাঠা</button>
+                    <button onclick="applyPreset('katha', 5)" class="px-3 py-1.5 rounded-xl bg-white border border-slate-300 font-bold text-slate-700 shadow-sm whitespace-nowrap active:scale-95 transition">🏠 ৫ কাঠা</button>
+                    <button onclick="applyPreset('bigha', 1)" class="px-3 py-1.5 rounded-xl bg-white border border-slate-300 font-bold text-slate-700 shadow-sm whitespace-nowrap active:scale-95 transition">🌾 ১ বিঘা</button>
+                    <button onclick="applyPreset('acre', 1)" class="px-3 py-1.5 rounded-xl bg-white border border-slate-300 font-bold text-slate-700 shadow-sm whitespace-nowrap active:scale-95 transition">🌍 ১ একর</button>
+                </div>
+            </div>
+
+            <!-- Input Box -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                    <label for="primary-input-unit" class="text-xs font-bold text-slate-700">একক নির্বাচন করুন:</label>
+                    <select id="primary-input-unit" onchange="handleUnitSelectorChange()" class="bg-slate-100 border border-slate-300 font-bold text-xs rounded-xl p-2 focus:outline-none focus:border-brand-500">
+                        <option value="shotok" selected>শতক / শতাংশ / ডিসিমল (৪৩৫.৬ বর্গফুট)</option>
+                        <option value="katha">কাঠা (৭২০ বর্গফুট)</option>
+                        <option value="bigha">বিঘা (১৪,৪০০ বর্গফুট / ২০ কাঠা)</option>
+                        <option value="acre">একর (৪৩,৫৬০ বর্গফুট / ১০০ শতক)</option>
+                        <option value="sqft">বর্গফুট (Sq. Feet)</option>
+                        <option value="hectare">হেক্টর (~২.৪৭ একর)</option>
+                        <option value="kani_ctg">কানি (চট্টগ্রাম ৪০ শতক)</option>
+                        <option value="keyar">কিয়ার (সিলেট ৩০ শতক)</option>
+                        <option value="chhatak">ছটাক (৪৫ বর্গফুট)</option>
+                    </select>
+                </div>
+                
+                <div class="bg-emerald-50/60 p-3.5 rounded-2xl border border-emerald-300">
+                    <label id="primary-input-label" class="block text-xs font-black text-brand-900 mb-1">শতক / শতাংশের পরিমাপ লিখুন:</label>
+                    <div class="relative">
+                        <input type="number" step="any" id="primary-main-input" placeholder="যেমন: ৫" oninput="handlePrimaryInput()" class="w-full bg-white border border-emerald-400 rounded-xl py-3 px-3 pr-10 text-brand-950 font-black text-lg focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                        <button onclick="copyPrimaryInput()" title="কপি করুন" class="absolute right-3 top-3.5 text-slate-400 hover:text-emerald-700"><i class="fa-regular fa-copy"></i></button>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 text-white p-3.5 rounded-2xl text-center">
+                    <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider block mb-0.5">সমন্বিত বিঘা-কাঠা-শতক বিভাজন</span>
+                    <div class="text-base font-black text-white" id="quick-combo-text">০ বিঘা ০ কাঠা ০ শতক</div>
+                </div>
+            </div>
+
+            <!-- Primary Results Grid -->
+            <div class="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 text-white rounded-2xl p-4 shadow-xl border border-slate-800 space-y-3">
+                <div class="flex items-center justify-between border-b border-white/10 pb-2">
+                    <div class="flex items-center gap-1.5 text-xs font-bold text-amber-300">
+                        <i class="fa-solid fa-star"></i> মূল ফলাফল একনজরে
+                    </div>
+                    <button onclick="saveCurrentCalculation()" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[11px] font-semibold transition flex items-center gap-1">
+                        <i class="fa-solid fa-bookmark"></i> সেভ করুন
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-center">
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/10">
+                        <span class="block text-[11px] text-slate-300 mb-0.5">বর্গফুট</span>
+                        <span class="text-lg font-black text-emerald-300" id="res-sqft">০</span>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/10">
+                        <span class="block text-[11px] text-emerald-300 mb-0.5">শতক</span>
+                        <span class="text-lg font-black text-amber-300" id="res-shotok">০</span>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/10">
+                        <span class="block text-[11px] text-slate-300 mb-0.5">কাঠা</span>
+                        <span class="text-lg font-black text-blue-300" id="res-katha">০</span>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/10">
+                        <span class="block text-[11px] text-slate-300 mb-0.5">বিঘা</span>
+                        <span class="text-lg font-black text-purple-300" id="res-bigha">০</span>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/10 col-span-2 sm:col-span-1">
+                        <span class="block text-[11px] text-slate-300 mb-0.5">একর</span>
+                        <span class="text-lg font-black text-teal-300" id="res-acre">০</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Extended Regional Units Accordion -->
+            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+                <button onclick="toggleExtendedUnits()" id="toggle-ext-btn" class="w-full bg-slate-100 hover:bg-slate-200 p-3 font-bold text-xs text-slate-700 flex items-center justify-between">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-earth-asia text-amber-500"></i> আঞ্চলিক ও অন্যান্য এককসমূহ (কানি, গণ্ডা, হেক্টর...)</span>
+                    <i id="ext-btn-icon" class="fa-solid fa-chevron-down transition-transform"></i>
+                </button>
+                <div id="extended-units-container" class="p-3 border-t border-slate-200 hidden space-y-3 bg-slate-50">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                            <label class="block text-[10px] font-semibold text-slate-500 mb-1">হেক্টর</label>
+                            <input type="number" step="any" id="hectare" placeholder="0" oninput="convertLand('hectare')" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs font-semibold">
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                            <label class="block text-[10px] font-semibold text-slate-500 mb-1">বর্গমিটার</label>
+                            <input type="number" step="any" id="sqmeter" placeholder="0" oninput="convertLand('sqmeter')" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs font-semibold">
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                            <label class="block text-[10px] font-semibold text-slate-500 mb-1">বর্গগজ</label>
+                            <input type="number" step="any" id="sqyard" placeholder="0" oninput="convertLand('sqyard')" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs font-semibold">
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                            <label class="block text-[10px] font-semibold text-slate-500 mb-1">ছটাক</label>
+                            <input type="number" step="any" id="chhatak" placeholder="0" oninput="convertLand('chhatak')" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs font-semibold">
+                        </div>
+                        <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200">
+                            <label class="block text-[10px] font-bold text-amber-900 mb-1">কানি (চট্টগ্রাম)</label>
+                            <input type="number" step="any" id="kani_ctg" placeholder="0" oninput="convertLand('kani_ctg')" class="w-full bg-white border border-amber-300 rounded-lg p-1.5 text-xs font-semibold">
+                        </div>
+                        <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200">
+                            <label class="block text-[10px] font-bold text-amber-900 mb-1">কিয়ার (সিলেট)</label>
+                            <input type="number" step="any" id="keyar" placeholder="0" oninput="convertLand('keyar')" class="w-full bg-white border border-amber-300 rounded-lg p-1.5 text-xs font-semibold">
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                            <label class="block text-[10px] font-semibold text-slate-500 mb-1">গণ্ডা</label>
+                            <input type="number" step="any" id="gonda" placeholder="0" oninput="convertLand('gonda')" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs font-semibold">
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                            <label class="block text-[10px] font-semibold text-slate-500 mb-1">কড়া</label>
+                            <input type="number" step="any" id="kora" placeholder="0" oninput="convertLand('kora')" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs font-semibold">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Saved Calculations List -->
+            <div id="saved-calculations-box" class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hidden space-y-2">
+                <div class="flex items-center justify-between text-xs font-bold text-slate-700 border-b pb-2">
+                    <span><i class="fa-solid fa-bookmark text-emerald-600"></i> সেভ করা হিসাবসমূহ</span>
+                    <button onclick="clearSavedCalculations()" class="text-red-500 text-[11px] hover:underline">সব মুছুন</button>
+                </div>
+                <div id="saved-list-container" class="space-y-2 max-h-48 overflow-y-auto"></div>
+            </div>
+        </div>
+
+        <!-- ================= MODULE 2: AREA & SHAPE ================= -->
+        <div id="module-area" class="tab-content hidden space-y-4">
+            <div class="bg-blue-50 border border-blue-200 rounded-2xl p-3.5 space-y-3">
+                <h2 class="text-sm font-bold text-blue-950 flex items-center gap-2">
+                    <i class="fa-solid fa-ruler-combined text-blue-600"></i> দৈর্ঘ্য ও প্রস্থ দিয়ে জমির আয়তন ও নকশা
+                </h2>
+                <div class="flex gap-1.5 overflow-x-auto pb-1 text-xs">
+                    <button onclick="switchAreaShape('rect')" id="shape-btn-rect" class="px-3 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm whitespace-nowrap">আয়তক্ষেত্র</button>
+                    <button onclick="switchAreaShape('irregular_avg')" id="shape-btn-irregular_avg" class="px-3 py-1.5 rounded-xl font-bold bg-white text-slate-700 border border-slate-300 whitespace-nowrap">৪-বাহু (গড় পদ্ধতি)</button>
+                    <button onclick="switchAreaShape('irregular_heron')" id="shape-btn-irregular_heron" class="px-3 py-1.5 rounded-xl font-bold bg-white text-slate-700 border border-slate-300 whitespace-nowrap">৪-বাহু (কর্ণ সহ হেরন)</button>
+                    <button onclick="switchAreaShape('triangle')" id="shape-btn-triangle" class="px-3 py-1.5 rounded-xl font-bold bg-white text-slate-700 border border-slate-300 whitespace-nowrap">ত্রিভুজ</button>
+                    <button onclick="switchAreaShape('circle')" id="shape-btn-circle" class="px-3 py-1.5 rounded-xl font-bold bg-white text-slate-700 border border-slate-300 whitespace-nowrap">বৃত্ত / পুকুর</button>
+                </div>
+            </div>
+
+            <!-- Shape Inputs & Preview -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white border border-slate-200 p-4 rounded-2xl space-y-3 shadow-sm">
+                    <!-- Rectangle Inputs -->
+                    <div id="shape-card-rect" class="space-y-3">
+                        <h3 class="text-xs font-bold text-slate-800">আয়তাকার জমির মাপ (ফুট):</h3>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">দৈর্ঘ্য (Length - ফুট)</label>
+                            <input type="number" step="any" id="rect-len" value="100" oninput="calcRectArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">প্রস্থ (Width - ফুট)</label>
+                            <input type="number" step="any" id="rect-wid" value="50" oninput="calcRectArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-sm font-bold">
+                        </div>
+                    </div>
+
+                    <!-- Irregular 4-Side Inputs (Average) -->
+                    <div id="shape-card-irregular_avg" class="space-y-2.5 hidden">
+                        <h3 class="text-xs font-bold text-slate-800">৪-বাহু বিশিষ্ট জমির মাপ (ফুট - গড় পদ্ধতি):</h3>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">উত্তর বাহু (ফু)</label>
+                                <input type="number" step="any" id="irr-n" value="80" oninput="calcIrregularArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">দক্ষিণ বাহু (ফু)</label>
+                                <input type="number" step="any" id="irr-s" value="85" oninput="calcIrregularArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">পূর্ব বাহু (ফু)</label>
+                                <input type="number" step="any" id="irr-e" value="40" oninput="calcIrregularArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">পশ্চিম বাহু (ফু)</label>
+                                <input type="number" step="any" id="irr-w" value="45" oninput="calcIrregularArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-xs font-bold">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Irregular 4-Side Inputs (Heron with Diagonal) -->
+                    <div id="shape-card-irregular_heron" class="space-y-2.5 hidden">
+                        <h3 class="text-xs font-bold text-slate-800">৪-বাহু + কর্ণ (অত্যন্ত নিখুঁত হেরন সূত্র):</h3>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">বাহু ১ (উত্তর - ফু)</label>
+                                <input type="number" step="any" id="ih-a" value="80" oninput="calcHeronQuadArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">বাহু ২ (পূর্ব - ফু)</label>
+                                <input type="number" step="any" id="ih-b" value="40" oninput="calcHeronQuadArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">বাহু ৩ (দক্ষিণ - ফু)</label>
+                                <input type="number" step="any" id="ih-c" value="85" oninput="calcHeronQuadArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">বাহু ৪ (পশ্চিম - ফু)</label>
+                                <input type="number" step="any" id="ih-d" value="45" oninput="calcHeronQuadArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-xs font-bold">
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-[10px] font-semibold text-blue-700 mb-0.5">মাঝখানের কর্ণ (Diagonal - ফু)</label>
+                                <input type="number" step="any" id="ih-diag" value="90" oninput="calcHeronQuadArea()" class="w-full bg-blue-50 border border-blue-300 rounded-xl p-2 text-xs font-bold">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Triangle Inputs -->
+                    <div id="shape-card-triangle" class="space-y-3 hidden">
+                        <h3 class="text-xs font-bold text-slate-800">ত্রিভুজাকার জমির মাপ (ফুট - হেরন সূত্র):</h3>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">বাহু ১ (a - ফুট)</label>
+                            <input type="number" step="any" id="tri-a" value="60" oninput="calcTriangleArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-sm font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">বাহু ২ (b - ফুট)</label>
+                            <input type="number" step="any" id="tri-b" value="80" oninput="calcTriangleArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-sm font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">বাহু ৩ (c - ফুট)</label>
+                            <input type="number" step="any" id="tri-c" value="100" oninput="calcTriangleArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-sm font-bold">
+                        </div>
+                    </div>
+
+                    <!-- Circle Inputs -->
+                    <div id="shape-card-circle" class="space-y-3 hidden">
+                        <h3 class="text-xs font-bold text-slate-800">বৃত্তাকার জমি বা পুকুর (ফুট):</h3>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">ব্যাস বা ব্যাসার্ধ নির্বাচন:</label>
+                            <select id="circle-mode" onchange="calcCircleArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-xs font-bold mb-2">
+                                <option value="radius">ব্যাসার্ধ (Radius)</option>
+                                <option value="diameter">ব্যাস (Diameter)</option>
+                            </select>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">মান (ফুট)</label>
+                            <input type="number" step="any" id="circle-val" value="30" oninput="calcCircleArea()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 text-sm font-bold">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Area Result & SVG Preview -->
+                <div class="bg-slate-900 text-white p-4 rounded-2xl flex flex-col justify-between space-y-3 shadow-md">
+                    <div>
+                        <span class="text-[11px] font-bold text-blue-400 uppercase tracking-wider block mb-1">গণনাকৃত মোট ক্ষেত্রফল</span>
+                        <div class="text-2xl font-black text-white" id="area-res-sqft">৫,০০০ বর্গফুট</div>
+                        <div class="text-sm font-bold text-amber-300 mt-1" id="area-res-shotok">১১.৪৭৮ শতক (ডিসিমেল)</div>
+                        <div class="text-xs text-slate-400 mt-1" id="area-res-combo">০ বিঘা ৬ কাঠা ১.৫ শতক</div>
+                    </div>
+
+                    <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 flex flex-col items-center justify-center min-h-[140px]">
+                        <span class="text-[10px] text-slate-400 mb-2">নকশা স্কেল প্রিভিউ</span>
+                        <div id="shape-svg-container" class="w-full flex justify-center items-center">
+                            <svg width="180" height="100" viewBox="0 0 180 100" class="border border-slate-700 rounded bg-slate-950">
+                                <rect x="25" y="15" width="130" height="70" fill="#0f172a" stroke="#38bdf8" stroke-width="2" rx="4"></rect>
+                                <text x="90" y="55" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">আয়তক্ষেত্র</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MODULE 3: INHERITANCE (FARAYEZ) ================= -->
+        <div id="module-inheritance" class="tab-content hidden space-y-4">
+            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 space-y-3">
+                <h2 class="text-sm font-bold text-amber-950 flex items-center gap-2">
+                    <i class="fa-solid fa-kaaba text-amber-600"></i> ইসলামিক ফারায়েজ (উত্তরাধিকার সম্পত্তি বণ্টন)
+                </h2>
+                <p class="text-xs text-slate-600">
+                    মৃত ব্যক্তির রেখে যাওয়া সম্পত্তি ইসলামিক শরীয়াহ মোতাবেক স্বামী, স্ত্রী, পিতা, মাতা, পুত্র ও কন্যার মাঝে স্বয়ংক্রিয়ভাবে ভাগ করুন।
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                    <div class="bg-white p-3 rounded-xl border border-amber-200">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">মোট সম্পত্তির পরিমাণ (শতক)</label>
+                        <input type="number" step="any" id="farayez-total-land" value="33" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm font-bold">
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-amber-200">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">মৃত ব্যক্তির লিঙ্গ</label>
+                        <select id="farayez-deceased-gender" onchange="handleFarayezGenderChange()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm font-bold">
+                            <option value="male" selected>পুরুষ (পিতা বা স্বামী প্রয়াত)</option>
+                            <option value="female">নারী (মাতা বা স্ত্রী প্রয়াত)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
+                    <div class="bg-white p-2.5 rounded-xl border border-amber-200">
+                        <label id="farayez-spouse-label" class="block text-[10px] font-semibold text-slate-600 mb-1">স্ত্রী আছে কি?</label>
+                        <select id="farayez-spouse" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs font-bold">
+                            <option value="0">না</option>
+                            <option value="1" selected>হ্যাঁ (১ জন)</option>
+                            <option value="2">হ্যাঁ (২ জন)</option>
+                            <option value="3">হ্যাঁ (৩ জন)</option>
+                            <option value="4">হ্যাঁ (৪ জন)</option>
+                        </select>
+                    </div>
+                    <div class="bg-white p-2.5 rounded-xl border border-amber-200">
+                        <label class="block text-[10px] font-semibold text-slate-600 mb-1">পুত্রের সংখ্যা</label>
+                        <input type="number" id="farayez-sons" value="2" min="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs font-bold">
+                    </div>
+                    <div class="bg-white p-2.5 rounded-xl border border-amber-200">
+                        <label class="block text-[10px] font-semibold text-slate-600 mb-1">কন্যার সংখ্যা</label>
+                        <input type="number" id="farayez-daughters" value="1" min="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs font-bold">
+                    </div>
+                    <div class="bg-white p-2.5 rounded-xl border border-amber-200">
+                        <label class="block text-[10px] font-semibold text-slate-600 mb-1">পিতা / মাতা জীবিত?</label>
+                        <select id="farayez-parents" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs font-bold">
+                            <option value="none">কেউ জীবিত নন</option>
+                            <option value="both">পিতা ও মাতা উভয়ই</option>
+                            <option value="father">শুধু পিতা</option>
+                            <option value="mother">শুধু মাতা</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button onclick="calculateFarayez()" class="w-full bg-amber-600 hover:bg-amber-700 text-white rounded-xl py-2.5 px-3 text-xs font-bold shadow transition">
+                    শরীয়াহ মোতাবেক বণ্টন হিসাব করুন
+                </button>
+            </div>
+
+            <!-- Farayez Results Output -->
+            <div id="farayez-result-box" class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hidden space-y-3">
+                <h3 class="text-xs font-bold text-slate-800 border-b pb-2 flex items-center justify-between">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-file-invoice-dollar text-emerald-600"></i> শরীয়াহ মোতাবেক উত্তরাধিকারীদের প্রাপ্য অংশ:</span>
+                    <button onclick="printFarayez()" class="text-xs text-amber-700 hover:underline flex items-center gap-1"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
+                </h3>
+                <div id="farayez-output-list" class="space-y-2"></div>
+            </div>
+        </div>
+
+        <!-- ================= MODULE 4: LAND DIVISION ================= -->
+        <div id="module-division" class="tab-content hidden space-y-4">
+            <div class="bg-purple-50 border border-purple-200 rounded-2xl p-4 space-y-3">
+                <h2 class="text-sm font-bold text-purple-950 flex items-center gap-2">
+                    <i class="fa-solid fa-users-line text-purple-600"></i> শরিক ও অংশীদারদের মধ্যে জমি বণ্টন
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="bg-white p-3 rounded-xl border border-purple-200">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">মোট জমির পরিমাণ (শতক)</label>
+                        <input type="number" step="any" id="div-total-land" value="50" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm font-bold">
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-purple-200">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">অংশগ্রহণকারী শরিকের সংখ্যা</label>
+                        <input type="number" id="div-total-persons" value="4" min="1" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm font-bold">
+                    </div>
+                </div>
+                <button onclick="calculateDivision()" class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-xl py-2.5 text-xs font-bold shadow transition">বণ্টন ফলাফল দেখুন</button>
+            </div>
+
+            <div id="division-result-box" class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hidden space-y-3">
+                <h3 class="text-xs font-bold text-slate-800 border-b pb-2">প্রতি শরিকের প্রাপ্য অংশ:</h3>
+                <div class="p-3 bg-purple-50 border border-purple-200 rounded-xl flex items-center justify-between">
+                    <div>
+                        <span class="block text-xs text-purple-800">জনপ্রতি বরাদ্দ</span>
+                        <div class="text-xl font-black text-purple-900" id="div-res-per-person">১২.৫ শতক</div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-600 font-semibold" id="div-res-breakdown">৫৪৪৩.৭৫ বর্গফুট</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MODULE 5: VALUATION & REGISTRATION ================= -->
+        <div id="module-valuation" class="tab-content hidden space-y-4">
+            <div class="bg-teal-50 border border-teal-200 rounded-2xl p-4 space-y-3">
+                <h2 class="text-sm font-bold text-teal-950 flex items-center gap-2">
+                    <i class="fa-solid fa-sack-dollar text-teal-600"></i> জমির দলিল রেজিস্ট্রি খরচ ও সরকারি ফি
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="bg-white p-3 rounded-xl border border-teal-200">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">জমির সরকারি দলিল মূল্য (টাকা)</label>
+                        <input type="number" step="any" id="reg-market-price" value="500000" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm font-bold">
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-teal-200">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">দলিলের প্রকৃতি</label>
+                        <select id="reg-deed-type" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm font-bold">
+                            <option value="saf_kabala" selected>সাফ-কবালা (ক্রয়-বিক্রয়)</option>
+                            <option value="dan_blood">হেবা / রক্তসম্পর্কীয় দানপত্র</option>
+                            <option value="batwara">বাটোয়ারা / বণ্টননামা</option>
+                            <option value="gift">সাধারণ দানপত্র</option>
+                        </select>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-teal-200 col-span-1 sm:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">এলাকার ধরন</label>
+                        <select id="reg-area-type" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm font-bold">
+                            <option value="union">ইউনিয়ন পরিষদ এলাকা (কম স্থানীয় কর)</option>
+                            <option value="pauro">পৌরসভা এলাকা</option>
+                            <option value="city">সিটি কর্পোরেশন এলাকা</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="calculateRegistrationFee()" class="w-full bg-teal-600 hover:bg-teal-700 text-white rounded-xl py-2.5 text-xs font-bold shadow transition">খরচ হিসাব করুন</button>
+            </div>
+
+            <div id="reg-result-box" class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hidden space-y-3">
+                <h3 class="text-xs font-bold text-slate-800 border-b pb-2">আনুমানিক রেজিস্ট্রি খরচ বিবরণী:</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+                    <div class="bg-slate-50 p-2.5 rounded-xl border">
+                        <span class="block text-[10px] text-slate-500">স্ট্যাম্প শুল্ক</span>
+                        <span class="font-bold text-slate-900" id="reg-stamp">৳০</span>
+                    </div>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border">
+                        <span class="block text-[10px] text-slate-500">নিবন্ধন ফি</span>
+                        <span class="font-bold text-slate-900" id="reg-fee">৳০</span>
+                    </div>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border">
+                        <span class="block text-[10px] text-slate-500">স্থানীয় কর</span>
+                        <span class="font-bold text-slate-900" id="reg-local">৳০</span>
+                    </div>
+                    <div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-300">
+                        <span class="block text-[10px] text-emerald-800 font-bold">মোট সরকারি খরচ</span>
+                        <span class="font-black text-emerald-950 text-sm" id="reg-total">৳০</span>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-500 italic">* এছাড়া হলফনামা ৩০০ টাকা, ই-ফি এবং দলিল লেখক সমিতির খরচ প্রযোজ্য হতে পারে।</p>
+            </div>
+        </div>
+
+        <!-- ================= MODULE 6: GLOSSARY ================= -->
+        <div id="module-glossary" class="tab-content hidden space-y-4">
+            <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-4 space-y-3">
+                <h2 class="text-sm font-bold text-indigo-950 flex items-center gap-2">
+                    <i class="fa-solid fa-book-bookmark text-indigo-600"></i> ভূমি শব্দকোষ ও খতিয়ান গাইড
+                </h2>
+                <div class="space-y-2 text-xs">
+                    <div class="bg-white p-3 rounded-xl border border-indigo-100">
+                        <span class="font-bold text-indigo-900 block">সিএস খতিয়ান (CS - Cadastral Survey):</span>
+                        <span class="text-slate-600">১৮৮৮ থেকে ১৯৪০ সালের মধ্যে ব্রিটিশ আমলে প্রস্তুতকৃত প্রথম জরিপ। জমি সংক্রান্ত বিরোধে এটি মূল শিকড় হিসেবে বিবেচিত হয়।</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-indigo-100">
+                        <span class="font-bold text-indigo-900 block">এসএ খতিয়ান (SA - State Acquisition):</span>
+                        <span class="text-slate-600">১৯৫৬-১৯৬২ সালে জমিদারি প্রথা বিলুপ্তির পর প্রস্তুতকৃত খতিয়ান।</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-indigo-100">
+                        <span class="font-bold text-indigo-900 block">আরএস খতিয়ান (RS - Revisional Survey):</span>
+                        <span class="text-slate-600">সিএস ও এসএ জরিপের ভুলভ্রান্তি সংশোধন করে প্রস্তুতকৃত সবচেয়ে নির্ভরযোগ্য জরিপ।</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-indigo-100">
+                        <span class="font-bold text-indigo-900 block">বিএস বা বিআরএস (BS / BRS / সিটি জরিপ):</span>
+                        <span class="text-slate-600">১৯৯৮ সাল থেকে চলমান হালনাগাদ আধুনিক জরিপ খতিয়ান।</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-indigo-100">
+                        <span class="font-bold text-indigo-900 block">নামজারি (Mutation) ও ডিসিআর (DCR):</span>
+                        <span class="text-slate-600">ক্রয় বা ওয়ারিশসূত্রে নতুন মালিকের নামে খতিয়ান তৈরি করাই হলো নামজারি। নামজারি আবেদন মঞ্জুর হলে ডিসিআর রশিদ প্রদান করা হয়।</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-3 mt-4 text-center text-xs text-slate-500">
+        &copy; ২০২৬ JomiCalc Pro &bull; বাংলাদেশের ডিজিটাল ভূমি প্ল্যাটফর্ম।
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-2xl shadow-xl opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center gap-2">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toastText">সফলভাবে সম্পন্ন!</span>
+    </div>
+
+    <script>
+        // Rates to SqFt
+        const toSqFtRates = {
+            sqft: 1,
+            shotok: 435.6,
+            katha: 720,
+            bigha: 14400,
+            acre: 43560,
+            hectare: 107639.1,
+            sqmeter: 10.7639,
+            sqyard: 9,
+            chhatak: 45,
+            kani_ctg: 17424,
+            keyar: 13068,
+            gonda: 871.2,
+            kora: 217.8
+        };
+
+        const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+        let useBengaliNumbers = true;
+        let currentInputUnit = 'shotok';
+
+        function toBn(num, dec = 3) {
+            if (num === '' || num === null || num === undefined || isNaN(num)) return useBengaliNumbers ? '০' : '0';
+            let formatted = (typeof num === 'number') ? (Number.isInteger(num) ? num.toLocaleString() : num.toLocaleString(undefined, { maximumFractionDigits: dec })) : num.toString();
+            if (!useBengaliNumbers) return formatted;
+            return formatted.replace(/[0-9]/g, w => bnDigits[parseInt(w, 10)]);
+        }
+
+        function toggleLang() {
+            useBengaliNumbers = !useBengaliNumbers;
+            document.getElementById('lang-text').innerText = useBengaliNumbers ? 'বাংলা' : 'English';
+            handlePrimaryInput();
+            calcRectArea();
+        }
+
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('module-' + tabId).classList.remove('hidden');
+            document.getElementById('tab-' + tabId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Unit Selector Change
+        function handleUnitSelectorChange() {
+            currentInputUnit = document.getElementById('primary-input-unit').value;
+            const labels = {
+                shotok: 'শতক / শতাংশের পরিমাপ লিখুন:',
+                katha: 'কাঠার পরিমাপ লিখুন:',
+                bigha: 'বিঘার পরিমাপ লিখুন:',
+                sqft: 'বর্গফুটের পরিমাপ লিখুন:',
+                acre: 'একর পরিমাপ লিখুন:',
+                hectare: 'হেক্টরের পরিমাপ লিখুন:',
+                kani_ctg: 'কানি (চট্টগ্রাম) পরিমাপ লিখুন:',
+                keyar: 'কিয়ার (সিলেট) পরিমাপ লিখুন:',
+                chhatak: 'ছটাকের পরিমাপ লিখুন:'
+            };
+            document.getElementById('primary-input-label').innerText = labels[currentInputUnit] || 'পরিমাণ লিখুন:';
+            handlePrimaryInput();
+        }
+
+        function applyPreset(unit, val) {
+            document.getElementById('primary-input-unit').value = unit;
+            handleUnitSelectorChange();
+            document.getElementById('primary-main-input').value = val;
+            handlePrimaryInput();
+        }
+
+        function clearAllInputs() {
+            document.getElementById('primary-main-input').value = '';
+            updateResults(0);
+        }
+
+        function handlePrimaryInput() {
+            const val = parseFloat(document.getElementById('primary-main-input').value);
+            if (isNaN(val) || val < 0) {
+                updateResults(0);
+                return;
+            }
+            const totalSqFt = val * (toSqFtRates[currentInputUnit] || 1);
+            updateResults(totalSqFt);
+        }
+
+        function updateResults(totalSqFt) {
+            const sqft = totalSqFt;
+            const shotok = totalSqFt / toSqFtRates.shotok;
+            const katha = totalSqFt / toSqFtRates.katha;
+            const bigha = totalSqFt / toSqFtRates.bigha;
+            const acre = totalSqFt / toSqFtRates.acre;
+
+            document.getElementById('res-sqft').innerText = toBn(sqft, 2);
+            document.getElementById('res-shotok').innerText = toBn(shotok, 3);
+            document.getElementById('res-katha').innerText = toBn(katha, 3);
+            document.getElementById('res-bigha').innerText = toBn(bigha, 3);
+            document.getElementById('res-acre').innerText = toBn(acre, 3);
+
+            // Bigha Katha Shotok combo
+            const shotokPerBigha = 14400 / 435.6; // ~33.058
+            const shotokPerKatha = 720 / 435.6;   // ~1.653
+            const bighas = Math.floor(shotok / shotokPerBigha);
+            const remBigha = shotok - (bighas * shotokPerBigha);
+            const kathas = Math.floor(remBigha / shotokPerKatha);
+            const shotoksRem = remBigha - (kathas * shotokPerKatha);
+
+            document.getElementById('quick-combo-text').innerText = 
+                useBengaliNumbers 
+                ? \`\${toBn(bighas, 0)} বিঘা \${toBn(kathas, 0)} কাঠা \${toBn(shotoksRem, 2)} শতক\`
+                : \`\${bighas} Bigha \${kathas} Katha \${shotoksRem.toFixed(2)} Shotok\`;
+
+            // Sync extended inputs
+            if (document.getElementById('hectare')) {
+                document.getElementById('hectare').value = (totalSqFt / toSqFtRates.hectare).toFixed(4);
+                document.getElementById('sqmeter').value = (totalSqFt / toSqFtRates.sqmeter).toFixed(2);
+                document.getElementById('sqyard').value = (totalSqFt / toSqFtRates.sqyard).toFixed(2);
+                document.getElementById('chhatak').value = (totalSqFt / toSqFtRates.chhatak).toFixed(2);
+                document.getElementById('kani_ctg').value = (totalSqFt / toSqFtRates.kani_ctg).toFixed(3);
+                document.getElementById('keyar').value = (totalSqFt / toSqFtRates.keyar).toFixed(3);
+                document.getElementById('gonda').value = (totalSqFt / toSqFtRates.gonda).toFixed(2);
+                document.getElementById('kora').value = (totalSqFt / toSqFtRates.kora).toFixed(2);
+            }
+        }
+
+        function convertLand(unitKey) {
+            const val = parseFloat(document.getElementById(unitKey).value);
+            if (isNaN(val) || val < 0) return;
+            const totalSqFt = val * (toSqFtRates[unitKey] || 1);
+            updateResults(totalSqFt);
+        }
+
+        function toggleExtendedUnits() {
+            const container = document.getElementById('extended-units-container');
+            const icon = document.getElementById('ext-btn-icon');
+            container.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        }
+
+        function copyPrimaryInput() {
+            const val = document.getElementById('primary-main-input').value;
+            if (!val) return;
+            navigator.clipboard?.writeText(val);
+            showToast('মান কপি করা হয়েছে!');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastText').innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2200);
+        }
+
+        // LocalStorage History
+        function saveCurrentCalculation() {
+            const val = document.getElementById('primary-main-input').value;
+            if (!val) {
+                showToast('প্রথমে কিছু পরিমাপ লিখুন!');
+                return;
+            }
+            const record = {
+                unit: currentInputUnit,
+                value: val,
+                shotok: document.getElementById('res-shotok').innerText,
+                date: new Date().toLocaleDateString('bn-BD')
+            };
+            let saved = JSON.parse(localStorage.getItem('jomi_pro_saved') || '[]');
+            saved.unshift(record);
+            if (saved.length > 15) saved.pop();
+            localStorage.setItem('jomi_pro_saved', JSON.stringify(saved));
+            renderSavedCalculations();
+            showToast('হিসাব সফলভাবে সেভ হলো!');
+        }
+
+        function renderSavedCalculations() {
+            const saved = JSON.parse(localStorage.getItem('jomi_pro_saved') || '[]');
+            const container = document.getElementById('saved-list-container');
+            const box = document.getElementById('saved-calculations-box');
+            if (saved.length === 0) {
+                box.classList.add('hidden');
+                return;
+            }
+            box.classList.remove('hidden');
+            container.innerHTML = saved.map((item, idx) => \`
+                <div class="bg-slate-50 p-2.5 rounded-xl border flex justify-between items-center text-xs">
+                    <div>
+                        <span class="font-bold text-slate-800">\${item.value} \${item.unit}</span>
+                        <span class="text-slate-500 block text-[10px]">= \${item.shotok} শতক (\${item.date})</span>
+                    </div>
+                    <button onclick="loadSavedItem(\${idx})" class="text-emerald-700 font-bold px-2.5 py-1 bg-emerald-100/60 rounded-lg">লোড</button>
+                </div>
+            \`).join('');
+        }
+
+        function loadSavedItem(idx) {
+            const saved = JSON.parse(localStorage.getItem('jomi_pro_saved') || '[]');
+            if (saved[idx]) {
+                document.getElementById('primary-input-unit').value = saved[idx].unit;
+                handleUnitSelectorChange();
+                document.getElementById('primary-main-input').value = saved[idx].value;
+                handlePrimaryInput();
+                showToast('হিসাব লোড করা হয়েছে');
+            }
+        }
+
+        function clearSavedCalculations() {
+            localStorage.removeItem('jomi_pro_saved');
+            renderSavedCalculations();
+            showToast('সকল সেভ করা হিসাব মোছা হয়েছে');
+        }
+
+        // ================= AREA & SHAPE =================
+        function switchAreaShape(shape) {
+            ['rect', 'irregular_avg', 'irregular_heron', 'triangle', 'circle'].forEach(s => {
+                const card = document.getElementById('shape-card-' + s);
+                const btn = document.getElementById('shape-btn-' + s);
+                if (card) card.classList.add('hidden');
+                if (btn) btn.className = "px-3 py-1.5 rounded-xl font-bold bg-white text-slate-700 border border-slate-300 whitespace-nowrap";
+            });
+            const activeCard = document.getElementById('shape-card-' + shape);
+            const activeBtn = document.getElementById('shape-btn-' + shape);
+            if (activeCard) activeCard.classList.remove('hidden');
+            if (activeBtn) activeBtn.className = "px-3 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm whitespace-nowrap";
+            
+            if (shape === 'rect') calcRectArea();
+            if (shape === 'irregular_avg') calcIrregularArea();
+            if (shape === 'irregular_heron') calcHeronQuadArea();
+            if (shape === 'triangle') calcTriangleArea();
+            if (shape === 'circle') calcCircleArea();
+        }
+
+        function updateAreaDisplay(sqft, shapeLabel, svgCode) {
+            const shotok = sqft / 435.6;
+            const katha = sqft / 720;
+            const bigha = sqft / 14400;
+
+            document.getElementById('area-res-sqft').innerText = toBn(sqft, 2) + " বর্গফুট";
+            document.getElementById('area-res-shotok').innerText = toBn(shotok, 3) + " শতক (ডিসিমেল)";
+            
+            const bighas = Math.floor(shotok / (14400/435.6));
+            const kathas = Math.floor((shotok % (14400/435.6)) / (720/435.6));
+            const remShotok = (shotok % (14400/435.6)) % (720/435.6);
+            document.getElementById('area-res-combo').innerText = \`\${toBn(bighas, 0)} বিঘা \${toBn(kathas, 0)} কাঠা \${toBn(remShotok, 2)} শতক\`;
+
+            if (svgCode) {
+                document.getElementById('shape-svg-container').innerHTML = svgCode;
+            }
+        }
+
+        function calcRectArea() {
+            const len = parseFloat(document.getElementById('rect-len').value) || 0;
+            const wid = parseFloat(document.getElementById('rect-wid').value) || 0;
+            const sqft = len * wid;
+            const svg = \`<svg width="180" height="100" viewBox="0 0 180 100" class="border border-slate-700 rounded bg-slate-950">
+                <rect x="25" y="20" width="130" height="60" fill="#0f172a" stroke="#38bdf8" stroke-width="2" rx="4"/>
+                <text x="90" y="15" fill="#94a3b8" font-size="9" text-anchor="middle">দৈর্ঘ্য: \${len} ফু</text>
+                <text x="15" y="55" fill="#94a3b8" font-size="9" text-anchor="middle" transform="rotate(-90 15 55)">প্রস্থ: \${wid} ফু</text>
+                <text x="90" y="55" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">\${toBn(sqft, 1)} ফু²</text>
+            </svg>\`;
+            updateAreaDisplay(sqft, 'আয়তক্ষেত্র', svg);
+        }
+
+        function calcIrregularArea() {
+            const n = parseFloat(document.getElementById('irr-n').value) || 0;
+            const s = parseFloat(document.getElementById('irr-s').value) || 0;
+            const e = parseFloat(document.getElementById('irr-e').value) || 0;
+            const w = parseFloat(document.getElementById('irr-w').value) || 0;
+            const avgLen = (n + s) / 2;
+            const avgWid = (e + w) / 2;
+            const sqft = avgLen * avgWid;
+            const svg = \`<svg width="180" height="100" viewBox="0 0 180 100" class="border border-slate-700 rounded bg-slate-950">
+                <polygon points="30,25 150,18 140,82 25,75" fill="#0f172a" stroke="#a855f7" stroke-width="2"/>
+                <text x="90" y="55" fill="#a855f7" font-size="10" font-weight="bold" text-anchor="middle">গড়: \${toBn(sqft, 1)} ফু²</text>
+            </svg>\`;
+            updateAreaDisplay(sqft, '৪-বাহু গড়', svg);
+        }
+
+        function calcHeronQuadArea() {
+            const a = parseFloat(document.getElementById('ih-a').value) || 0;
+            const b = parseFloat(document.getElementById('ih-b').value) || 0;
+            const c = parseFloat(document.getElementById('ih-c').value) || 0;
+            const d = parseFloat(document.getElementById('ih-d').value) || 0;
+            const diag = parseFloat(document.getElementById('ih-diag').value) || 0;
+
+            // Two triangles: (a, b, diag) and (c, d, diag)
+            const s1 = (a + b + diag) / 2;
+            const s2 = (c + d + diag) / 2;
+            let area1 = 0, area2 = 0;
+            if (s1 > a && s1 > b && s1 > diag) {
+                area1 = Math.sqrt(s1 * (s1 - a) * (s1 - b) * (s1 - diag));
+            }
+            if (s2 > c && s2 > d && s2 > diag) {
+                area2 = Math.sqrt(s2 * (s2 - c) * (s2 - d) * (s2 - diag));
+            }
+            const sqft = area1 + area2;
+            const svg = \`<svg width="180" height="100" viewBox="0 0 180 100" class="border border-slate-700 rounded bg-slate-950">
+                <polygon points="30,25 150,20 140,80 25,75" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+                <line x1="30" y1="25" x2="140" y2="80" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3"/>
+                <text x="90" y="55" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">নিখুঁত: \${toBn(sqft, 1)} ফু²</text>
+            </svg>\`;
+            updateAreaDisplay(sqft, 'হেরন ৪-বাহু', svg);
+        }
+
+        function calcTriangleArea() {
+            const a = parseFloat(document.getElementById('tri-a').value) || 0;
+            const b = parseFloat(document.getElementById('tri-b').value) || 0;
+            const c = parseFloat(document.getElementById('tri-c').value) || 0;
+            const s = (a + b + c) / 2;
+            let sqft = 0;
+            if (s > a && s > b && s > c) {
+                sqft = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+            }
+            const svg = \`<svg width="180" height="100" viewBox="0 0 180 100" class="border border-slate-700 rounded bg-slate-950">
+                <polygon points="90,15 155,80 25,80" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+                <text x="90" y="60" fill="#10b981" font-size="10" font-weight="bold" text-anchor="middle">\${toBn(sqft, 1)} ফু²</text>
+            </svg>\`;
+            updateAreaDisplay(sqft, 'ত্রিভুজ', svg);
+        }
+
+        function calcCircleArea() {
+            const mode = document.getElementById('circle-mode').value;
+            const val = parseFloat(document.getElementById('circle-val').value) || 0;
+            const r = mode === 'diameter' ? val / 2 : val;
+            const sqft = Math.PI * r * r;
+            const svg = \`<svg width="180" height="100" viewBox="0 0 180 100" class="border border-slate-700 rounded bg-slate-950">
+                <circle cx="90" cy="50" r="35" fill="#0f172a" stroke="#06b6d4" stroke-width="2"/>
+                <text x="90" y="54" fill="#06b6d4" font-size="10" font-weight="bold" text-anchor="middle">\${toBn(sqft, 1)} ফু²</text>
+            </svg>\`;
+            updateAreaDisplay(sqft, 'বৃত্তাকার', svg);
+        }
+
+        // ================= FARAYEZ LOGIC =================
+        function handleFarayezGenderChange() {
+            const g = document.getElementById('farayez-deceased-gender').value;
+            document.getElementById('farayez-spouse-label').innerText = g === 'male' ? 'স্ত্রী আছে কি?' : 'স্বামী আছে কি?';
+        }
+
+        function calculateFarayez() {
+            const total = parseFloat(document.getElementById('farayez-total-land').value) || 0;
+            const gender = document.getElementById('farayez-deceased-gender').value;
+            const spouseCount = parseInt(document.getElementById('farayez-spouse').value) || 0;
+            const sons = parseInt(document.getElementById('farayez-sons').value) || 0;
+            const daughters = parseInt(document.getElementById('farayez-daughters').value) || 0;
+            const parents = document.getElementById('farayez-parents').value;
+
+            const hasChildren = (sons > 0 || daughters > 0);
+            let spouseTotalShare = 0;
+            let spouseFractionText = '';
+
+            if (spouseCount > 0) {
+                if (gender === 'male') {
+                    // স্ত্রীর অংশ: সন্তান থাকলে ১/৮, সন্তান না থাকলে ১/৪
+                    const fraction = hasChildren ? 0.125 : 0.25;
+                    spouseTotalShare = total * fraction;
+                    spouseFractionText = hasChildren ? '১/৮ অংশ' : '১/৪ অংশ';
+                } else {
+                    // স্বামীর অংশ: সন্তান থাকলে ১/৪, সন্তান না থাকলে ১/২
+                    const fraction = hasChildren ? 0.25 : 0.5;
+                    spouseTotalShare = total * fraction;
+                    spouseFractionText = hasChildren ? '১/৪ অংশ' : '১/২ অংশ';
+                }
+            }
+
+            let fatherShare = 0;
+            let motherShare = 0;
+            if (parents === 'both' || parents === 'father') {
+                fatherShare = hasChildren ? total * (1/6) : total * (1/6);
+            }
+            if (parents === 'both' || parents === 'mother') {
+                motherShare = hasChildren ? total * (1/6) : total * (1/3);
+            }
+
+            let remainingForKids = total - spouseTotalShare - fatherShare - motherShare;
+            if (remainingForKids < 0) remainingForKids = 0;
+
+            const totalKidsShares = (sons * 2) + daughters;
+            let listHTML = '';
+
+            // Spouse Row
+            if (spouseCount > 0) {
+                const eachSpouse = spouseTotalShare / spouseCount;
+                listHTML += \`<div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200 flex justify-between items-center text-xs">
+                    <div>
+                        <span class="font-bold text-amber-950">\${gender === 'male' ? 'স্ত্রী' : 'স্বামী'} (\${spouseCount} জন)</span>
+                        <span class="text-[10px] text-amber-700 block">শরীয়াহ অংশ: \${spouseFractionText}</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="font-black text-amber-900">\${toBn(spouseTotalShare, 3)} শতক</span>
+                        \${spouseCount > 1 ? \`<span class="block text-[10px] text-slate-500">প্রত্যেকে: \${toBn(eachSpouse, 3)} শতক</span>\` : ''}
+                    </div>
+                </div>\`;
+            }
+
+            // Parents Row
+            if (fatherShare > 0) {
+                listHTML += \`<div class="bg-slate-50 p-2.5 rounded-xl border flex justify-between items-center text-xs">
+                    <span class="font-bold text-slate-800">পিতা (১/৬ অংশ):</span>
+                    <span class="font-black text-slate-900">\${toBn(fatherShare, 3)} শতক</span>
+                </div>\`;
+            }
+            if (motherShare > 0) {
+                listHTML += \`<div class="bg-slate-50 p-2.5 rounded-xl border flex justify-between items-center text-xs">
+                    <span class="font-bold text-slate-800">মাতা (\${hasChildren ? '১/৬ অংশ' : '১/৩ অংশ'}):</span>
+                    <span class="font-black text-slate-900">\${toBn(motherShare, 3)} শতক</span>
+                </div>\`;
+            }
+
+            // Children Rows (2:1 Ratio)
+            if (totalKidsShares > 0) {
+                const sonTotal = sons > 0 ? (remainingForKids * (sons * 2)) / totalKidsShares : 0;
+                const daughterTotal = daughters > 0 ? (remainingForKids * daughters) / totalKidsShares : 0;
+                const perSon = sons > 0 ? sonTotal / sons : 0;
+                const perDaughter = daughters > 0 ? daughterTotal / daughters : 0;
+
+                if (sons > 0) {
+                    listHTML += \`<div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 flex justify-between items-center text-xs">
+                        <div>
+                            <span class="font-bold text-emerald-950">পুত্র (\${sons} জন):</span>
+                            <span class="text-[10px] text-emerald-700 block">আসাবা (২ গুণ অংশ)</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-black text-emerald-900">মোট: \${toBn(sonTotal, 3)} শতক</span>
+                            <span class="block text-[10px] text-slate-600 font-semibold">প্রত্যেকে: \${toBn(perSon, 3)} শতক</span>
+                        </div>
+                    </div>\`;
+                }
+
+                if (daughters > 0) {
+                    listHTML += \`<div class="bg-teal-50 p-2.5 rounded-xl border border-teal-200 flex justify-between items-center text-xs">
+                        <div>
+                            <span class="font-bold text-teal-950">কন্যা (\${daughters} জন):</span>
+                            <span class="text-[10px] text-teal-700 block">আসাবা (১ গুণ অংশ)</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-black text-teal-900">মোট: \${toBn(daughterTotal, 3)} শতক</span>
+                            <span class="block text-[10px] text-slate-600 font-semibold">প্রত্যেকে: \${toBn(perDaughter, 3)} শতক</span>
+                        </div>
+                    </div>\`;
+                }
+            }
+
+            document.getElementById('farayez-output-list').innerHTML = listHTML;
+            document.getElementById('farayez-result-box').classList.remove('hidden');
+        }
+
+        function printFarayez() {
+            window.print();
+        }
+
+        // ================= DIVISION LOGIC =================
+        function calculateDivision() {
+            const total = parseFloat(document.getElementById('div-total-land').value) || 0;
+            const persons = parseInt(document.getElementById('div-total-persons').value) || 1;
+            const perPerson = total / persons;
+            const perPersonSqFt = perPerson * 435.6;
+
+            document.getElementById('div-res-per-person').innerText = \`\${toBn(perPerson, 3)} শতক\`;
+            document.getElementById('div-res-breakdown').innerText = \`বর্গফুটে: \${toBn(perPersonSqFt, 1)} বর্গফুট\`;
+            document.getElementById('division-result-box').classList.remove('hidden');
+        }
+
+        // ================= REGISTRATION FEE LOGIC =================
+        function calculateRegistrationFee() {
+            const price = parseFloat(document.getElementById('reg-market-price').value) || 0;
+            const type = document.getElementById('reg-deed-type').value;
+            const area = document.getElementById('reg-area-type').value;
+
+            let stampRate = 0.015; // 1.5%
+            let regRate = 0.01;   // 1%
+            let localRate = 0.02;  // 2%
+
+            if (area === 'city') localRate = 0.03; // 3% in City Corp
+            if (area === 'union') localRate = 0.015; // 1.5% in Union
+
+            if (type === 'dan_blood') {
+                stampRate = 0.005;
+                regRate = 0.005;
+                localRate = 0.005;
+            } else if (type === 'batwara') {
+                stampRate = 0.008;
+                regRate = 0.005;
+                localRate = 0.005;
+            }
+
+            const stamp = price * stampRate;
+            const reg = price * regRate;
+            const local = price * localRate;
+            const total = stamp + reg + local + 300; // 300 tk affidavit
+
+            document.getElementById('reg-stamp').innerText = '৳' + toBn(Math.round(stamp), 0);
+            document.getElementById('reg-fee').innerText = '৳' + toBn(Math.round(reg), 0);
+            document.getElementById('reg-local').innerText = '৳' + toBn(Math.round(local), 0);
+            document.getElementById('reg-total').innerText = '৳' + toBn(Math.round(total), 0);
+
+            document.getElementById('reg-result-box').classList.remove('hidden');
+        }
+
+        // On Load
+        window.onload = function() {
+            applyPreset('shotok', 1);
+            renderSavedCalculations();
+            calcRectArea();
+        };
+    </script>
+</body>
+</html>`;
